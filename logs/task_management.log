@@ -12350,3 +12350,54 @@ Action:
 
 Consider defining a bean of type 'com.example.task_management.service.TaskService' in your configuration.
 
+2026-08-16 20:44:14.294 INFO  [restartedMain] c.e.t.TaskManagementApplication : Starting TaskManagementApplication using Java 21.0.11 with PID 17856 (F:\projects\other\Spring_boot\task_management\task_management\target\classes started by kiran in F:\projects\other\Spring_boot\task_management)
+2026-08-16 20:44:14.294 INFO  [restartedMain] c.e.t.TaskManagementApplication : No active profile set, falling back to 1 default profile: "default"
+2026-08-16 20:44:14.348 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-16 20:44:14.351 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 2 ms. Found 1 JPA repository interface.
+2026-08-16 20:44:14.374 INFO  [restartedMain] o.s.boot.tomcat.TomcatWebServer : Tomcat initialized with port 8080 (http)
+2026-08-16 20:44:14.374 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol : Initializing ProtocolHandler ["http-nio-8080"]
+2026-08-16 20:44:14.374 INFO  [restartedMain] o.a.catalina.core.StandardService : Starting service [Tomcat]
+2026-08-16 20:44:14.374 INFO  [restartedMain] o.a.catalina.core.StandardEngine : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-08-16 20:44:14.384 INFO  [restartedMain] o.s.b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 89 ms
+2026-08-16 20:44:14.397 INFO  [restartedMain] org.hibernate.orm.jpa : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-08-16 20:44:14.407 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-16 20:44:14.407 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource : HikariPool-231 - Starting...
+2026-08-16 20:44:14.450 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool : HikariPool-231 - Added connection org.postgresql.jdbc.PgConnection@2e446261
+2026-08-16 20:44:14.450 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource : HikariPool-231 - Start completed.
+2026-08-16 20:44:14.463 INFO  [restartedMain] o.hibernate.orm.connections.pooling : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/task_management]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.5
+	Default catalog/schema: task_management/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-16 20:44:14.482 INFO  [restartedMain] org.hibernate.orm.core : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-16 20:44:14.493 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-16 20:44:14.508 WARN  [restartedMain] o.s.b.w.s.s.c.AnnotationConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'taskController' defined in file [F:\projects\other\Spring_boot\task_management\task_management\target\classes\com\example\task_management\controller\TaskController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.example.task_management.service.TaskService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2026-08-16 20:44:14.508 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-16 20:44:14.508 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource : HikariPool-231 - Shutdown initiated...
+2026-08-16 20:44:14.510 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource : HikariPool-231 - Shutdown completed.
+2026-08-16 20:44:14.510 INFO  [restartedMain] o.a.catalina.core.StandardService : Stopping service [Tomcat]
+2026-08-16 20:44:14.515 INFO  [restartedMain] o.s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-08-16 20:44:14.517 ERROR [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.example.task_management.controller.TaskController required a bean of type 'com.example.task_management.service.TaskService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.example.task_management.service.TaskService' in your configuration.
+
