@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.task_management.dto.TaskRequest;
+import com.example.task_management.dto.TaskResponse;
 import com.example.task_management.entity.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +35,9 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task){
-       logger.info("Creating task with title: {}", task.getTitle());      
-       return ResponseEntity.ok(service.createTask(task));
+    public ResponseEntity<TaskResponse> createTask(@RequestBody TaskRequest request){
+       logger.info("Creating task with title: {}", request.getTitle());      
+       return ResponseEntity.ok(service.createTask(request));
     }
     @PutMapping("/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable Long id){

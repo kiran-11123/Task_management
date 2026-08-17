@@ -5,7 +5,9 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
+import com.example.task_management.exception.TaskNotFoundException;
+import com.example.task_management.dto.TaskRequest;
+import com.example.task_management.dto.TaskResponse;
 @Service
 public class TaskService {
      
@@ -22,9 +24,23 @@ public class TaskService {
           logger.info("All Tasks Fetched successfully : {}" , tasks.size());
           return tasks;
     }
-    public Task createTask(Task task){
-         logger.info("Saving Task  {}" , task.getTitle());
-         return repository.save(task);
+    public TaskResponse createTask(TaskRequest request){
+         logger.info("Saving Task  {}" , request.getTitle());
+         Task task = new Task();
+         task.setTitle(request.getTitle());
+         task.setDescription(request.getDescription());
+         task.setCompleted(request.getCompleted());
+
+         Task savedTask = repository.save(task);
+
+         TaskResponse response = new TaskResponse(
+            savedTask.getId(),
+            savedTask.getTitle(),
+            savedTask.getDescription(),
+            savedTask.getCompleted()
+         );
+
+         return response;
     }
 
     public Task getTaskById(Long id){
@@ -35,7 +51,7 @@ public class TaskService {
           if(task.isPresent()){
              return task.get();
           }
-          throw new RuntimeException("Task not found with id : " + id);
+          throw new TaskNotFoundException("Task not found with id : " + id);
     }
     public Task updateTask(Long id){
           logger.info("Updating the task with id : " + id); 
@@ -48,7 +64,7 @@ public class TaskService {
 
               return repository.save(existingTask);
         }
-         throw new RuntimeException("Task not found with id : " + id);
+         throw new TaskNotFoundException("Task not found with id : " + id);
     }
 
     public void deleteTaskById(Long id) {
@@ -66,7 +82,7 @@ public class TaskService {
         return;
     }
 
-    throw new RuntimeException(
+    throw new TaskNotFoundException(
             "Task not found with id: " + id
     );
 }
