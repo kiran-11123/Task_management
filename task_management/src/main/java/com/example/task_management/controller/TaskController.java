@@ -4,6 +4,7 @@ import com.example.task_management.service.TaskService;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,12 @@ import com.example.task_management.dto.TaskResponse;
 import com.example.task_management.entity.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.Authenticator;
 import java.util.*;
+
+
+
 
 @RequestMapping("/api/tasks")
 @RestController
@@ -30,6 +36,14 @@ public class TaskController {
 
     public TaskController(TaskService service){
         this.service = service;
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<String>  getCurrentUser(Authentication authentication){
+
+        String email = authentication.getName();
+        return ResponseEntity.ok(email);
+
     }
 
     @GetMapping
