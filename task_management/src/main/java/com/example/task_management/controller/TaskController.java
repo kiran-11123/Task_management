@@ -38,6 +38,8 @@ public class TaskController {
         this.service = service;
     }
 
+
+
     @GetMapping("/me")
     public ResponseEntity<String>  getCurrentUser(Authentication authentication){
 
@@ -47,9 +49,10 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Task>>> getTasks(){
+    public ResponseEntity<ApiResponse<List<Task>>> getTasks(Authentication authentication){
          logger.info("Get All Tasks Controller is executing");
-         List<Task> tasks = service.getAllTasks();
+         String email  = authentication.getName();
+         List<Task> tasks = service.getMyTasks(email);
 
        ApiResponse<List<Task>> response = new ApiResponse<>(200 , "Tasks Fetched Successfully" , tasks);
        return ResponseEntity.ok(response);

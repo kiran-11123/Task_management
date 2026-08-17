@@ -5,11 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.example.task_management.entity.Task;
+import java.util.*;
 
 @Entity
 @Getter
@@ -33,6 +36,9 @@ public class User {
      
      @Column(nullable =  false)
      private String password;
+      
+     @OneToMany(mappedBy = "user")
+     private List<Task> tasks;
 
     
 

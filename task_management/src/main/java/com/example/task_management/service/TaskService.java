@@ -1,7 +1,13 @@
 package com.example.task_management.service;
 import com.example.task_management.repository.TaskRepository;
+import com.example.task_management.repository.UserRepository;
 import com.example.task_management.entity.Task;
+import com.example.task_management.entity.User;
+
 import java.util.*;
+
+import javax.management.RuntimeErrorException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,10 +18,27 @@ import com.example.task_management.dto.TaskResponse;
 public class TaskService {
      
     private final TaskRepository repository;
+    private final UserRepository userRepository;
     private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
-    public TaskService(TaskRepository repository){
+    public TaskService(TaskRepository repository , UserRepository  userRepository){
         this.repository = repository;
+        this.userRepository = userRepository;
+    }
+
+    public List<Task> getMyTasks(String email){
+
+         logger.info("Fetching the tasks for user : {}" , email);
+
+         Optional<User> users = userRepository.findByEmail(email);
+        
+         if(users.isPresent()){
+             User user = users.get();
+             return repository.findByUser(user);
+         }
+         throw new RuntimeException("User not found");
+
+
     }
 
     public List<Task> getAllTasks(){
