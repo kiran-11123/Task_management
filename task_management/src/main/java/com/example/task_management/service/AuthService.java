@@ -2,6 +2,8 @@ package com.example.task_management.service;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +11,12 @@ import com.example.task_management.dto.Auth.LoginRequest;
 import com.example.task_management.dto.Auth.RegisterRequest;
 import com.example.task_management.dto.Auth.RegisterResponse;
 import com.example.task_management.entity.User;
+import com.example.task_management.events.UserRegisteredEvent;
 import com.example.task_management.repository.UserRepository;
+import com.example.task_management.service.kafka.ProducerService;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 @Service
 @Slf4j
@@ -20,13 +25,16 @@ public class AuthService {
     private final UserRepository user_repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService  jwtService;
-    public AuthService(UserRepository userRepository , PasswordEncoder passwordEncoder , JwtService jwtService){
+    private final ProducerService producerService;
+    public AuthService(UserRepository userRepository , PasswordEncoder passwordEncoder , JwtService jwtService , ProducerService producerService){
          this.user_repository = userRepository;
          this.passwordEncoder = passwordEncoder;
+         this.producerService = producerService;
          this.jwtService= jwtService;
     }
-
+    
     public RegisterResponse register(RegisterRequest request){
+
          
         log.info("Registering user with email : {} " , request.getEmail());
 
@@ -41,7 +49,13 @@ public class AuthService {
         RegisterResponse response = new RegisterResponse();
         response.setEmail(savedUser.getEmail());
         response.setName(savedUser.getName());
-              log.info("User registered successfully with id: {}", savedUser.getId());
+
+        UserRegisteredEvent event = new UserRegisteredEvent(savedUser.getId() , savedUser.getEmail());
+        
+        producerService.sendUserRegisterEvent(event);
+
+        log.info("Email Event Triggered while user registered");
+        log.info("User registered successfully with id: {}", savedUser.getId());
 
         return response;
     }
