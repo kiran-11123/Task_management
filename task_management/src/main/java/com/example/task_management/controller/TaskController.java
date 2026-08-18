@@ -42,7 +42,6 @@ public class TaskController {
 
     @GetMapping("/me")
     public ResponseEntity<String>  getCurrentUser(Authentication authentication){
-
         String email = authentication.getName();
         return ResponseEntity.ok(email);
 
