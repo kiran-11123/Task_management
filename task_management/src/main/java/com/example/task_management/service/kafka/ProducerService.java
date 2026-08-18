@@ -1,10 +1,7 @@
 package com.example.task_management.service.kafka;
-
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
 import com.example.task_management.events.UserRegisteredEvent;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -12,10 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ProducerService {
 
     private final KafkaTemplate<String, UserRegisteredEvent> kafkaTemplate;
-
     public ProducerService(
-            KafkaTemplate<String, UserRegisteredEvent> kafkaTemplate) {
-
+        KafkaTemplate<String, UserRegisteredEvent> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 

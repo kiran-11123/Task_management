@@ -1,10 +1,7 @@
 package com.example.task_management.service.kafka;
-
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
 import com.example.task_management.events.UserRegisteredEvent;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
