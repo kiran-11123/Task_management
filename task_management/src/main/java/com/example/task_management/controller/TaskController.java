@@ -3,6 +3,7 @@ import com.example.task_management.service.TaskService;
 
 import jakarta.validation.Valid;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,6 +39,16 @@ public class TaskController {
         this.service = service;
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<Task>>> getAllTasks(){
+        
+        logger.info("Fetching All Tasks ");
+        List<Task> tasks = service.getAllTasks();
+
+        ApiResponse<List<Task>> response = new ApiResponse<>(200 , "Tasks Fetched Successfully" , tasks);
+        return ResponseEntity.ok(response);
+    }
+
 
 
     @GetMapping("/me")
@@ -58,9 +69,10 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<TaskResponse>> createTask(@Valid @RequestBody TaskRequest request){
-       logger.info("Creating task with title: {}", request.getTitle());      
-       TaskResponse task = service.createTask(request);
+    public ResponseEntity<ApiResponse<TaskResponse>> createTask(@Valid @RequestBody TaskRequest request , Authentication authentication){
+       logger.info("Creating task with title: {}", request.getTitle());   
+        String email  = authentication.getName();  
+       TaskResponse task = service.createTask(request,email);
 
        ApiResponse<TaskResponse> response = new ApiResponse<>(200 , "Task Created Successfully " , task);
        return ResponseEntity.status(201).body(response);

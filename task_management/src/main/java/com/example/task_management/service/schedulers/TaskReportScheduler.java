@@ -63,7 +63,7 @@ public class TaskReportScheduler {
                 row.createCell(0).setCellValue(task.getId());
                 row.createCell(1).setCellValue(task.getTitle());
                 row.createCell(2).setCellValue(task.getDescription());
-                row.createCell(3).setCellValue(task.getCompleted());
+                row.createCell(3).setCellValue(task.isCompleted());
             }
 
             // 6. Resize columns

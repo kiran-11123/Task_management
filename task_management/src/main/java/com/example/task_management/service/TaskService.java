@@ -10,6 +10,10 @@ import javax.management.RuntimeErrorException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import com.example.task_management.exception.TaskNotFoundException;
 import com.example.task_management.dto.TaskRequest;
@@ -25,12 +29,14 @@ public class TaskService {
         this.repository = repository;
         this.userRepository = userRepository;
     }
-
+    
+    
     public List<Task> getMyTasks(String email){
 
          logger.info("Fetching the tasks for user : {}" , email);
 
          Optional<User> users = userRepository.findByEmail(email);
+         logger.info("User Data fetched ${}" , users);
         
          if(users.isPresent()){
              User user = users.get();
@@ -40,32 +46,45 @@ public class TaskService {
 
 
     }
-
+    
+    @Cacheable("allTasks")
     public List<Task> getAllTasks(){
         logger.info("Fetching all Tasks");
           List<Task> tasks =  repository.findAll();
           logger.info("All Tasks Fetched successfully : {}" , tasks.size());
           return tasks;
     }
-    public TaskResponse createTask(TaskRequest request){
+
+    @Caching(evict = {
+        @CacheEvict(value = "tasks" , allEntries = true),
+        @CacheEvict(value = "allTasks" , allEntries = true)
+    })
+    public TaskResponse createTask(TaskRequest request , String email){
          logger.info("Saving Task  {}" , request.getTitle());
          Task task = new Task();
          task.setTitle(request.getTitle());
          task.setDescription(request.getDescription());
          task.setCompleted(request.getCompleted());
 
+         User user = userRepository.findByEmail(email).orElseThrow(()->new RuntimeException("User not found")
+);
+
          Task savedTask = repository.save(task);
+         savedTask.setUser(user);
+
+          Task  newSavedTask = repository.save(task);
 
          TaskResponse response = new TaskResponse(
             savedTask.getId(),
             savedTask.getTitle(),
             savedTask.getDescription(),
-            savedTask.getCompleted()
+            savedTask.isCompleted()
          );
 
          return response;
     }
-
+    
+    @Cacheable(value = "tasks" , key = "#id" )
     public Task getTaskById(Long id){
           logger.info("Fetching task with id : {}" , id);
 
@@ -76,6 +95,15 @@ public class TaskService {
           }
           throw new TaskNotFoundException("Task not found with id : " + id);
     }
+
+   @Caching(
+    put = {
+        @CachePut(value = "tasks", key = "#id")
+    },
+    evict = {
+        @CacheEvict(value = "allTasks", allEntries = true)
+    }
+)
     public Task updateTask(Long id){
           logger.info("Updating the task with id : " + id); 
 
@@ -83,13 +111,17 @@ public class TaskService {
         
         if(task.isPresent()){
               Task existingTask = task.get();
-              existingTask.setCompleted(!existingTask.getCompleted());
+              existingTask.setCompleted(!existingTask.isCompleted());
 
               return repository.save(existingTask);
         }
          throw new TaskNotFoundException("Task not found with id : " + id);
     }
-
+    
+    @Caching(evict = {
+    @CacheEvict(value = "tasks", key = "#id"),
+    @CacheEvict(value = "allTasks", allEntries = true)
+})
     public void deleteTaskById(Long id) {
 
     logger.info("Deleting task with id: {}", id);
